@@ -1,0 +1,260 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
+  <meta name="theme-color" content="#072724" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="description" content="River Rush — carve a tropical wild river on a jetski. Race 5 rivals across 3 laps in this mobile-first 3D racer." />
+  <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
+  <title>River Rush — Jetski Racing</title>
+  <script type="module" crossorigin src="./assets/index-DfNp9hpL.js"></script>
+  <link rel="stylesheet" crossorigin href="./assets/index-B23zUG_9.css">
+</head>
+<body>
+  <div id="app">
+    <canvas id="game-canvas" aria-label="River Rush 3D game view"></canvas>
+    <div class="scene-grade" aria-hidden="true"></div>
+    <div class="vignette" aria-hidden="true"></div>
+    <div id="boostOverlay" class="boost-overlay" aria-hidden="true"></div>
+    <div id="slowmoOverlay" class="slowmo-overlay" aria-hidden="true"></div>
+
+    <!-- BOOT -->
+    <div id="loading" class="loading">
+      <div class="loading-mark">
+        <div class="loading-wave"></div>
+        <div class="loading-logo">RIVER<span>RUSH</span></div>
+      </div>
+      <div class="loading-bar"><i id="loadingBar"></i></div>
+      <p class="loading-tip">Warming up the current…</p>
+    </div>
+
+    <!-- MAIN MENU -->
+    <section id="menu" class="screen menu hidden" aria-label="Main menu">
+      <div class="menu-top">
+        <div class="mini-brand">
+          <div class="mini-brand-mark">RR</div>
+          <div class="mini-brand-text"><b>River Rush</b><span>Tropical jetski racing</span></div>
+        </div>
+        <div class="menu-top-actions">
+          <button id="menuDailyBtn" class="pill-btn coin-pill" title="Daily rewards">
+            <span class="coin-glyph">●</span><span id="menuCoins">0</span>
+            <span id="dailyDot" class="daily-dot hidden"></span>
+          </button>
+          <button id="settingsBtn" class="icon-btn" aria-label="Settings">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3.2"/><path d="M19.4 15a1.7 1.7 0 0 0 .34 1.88l.06.06-2.1 2.1-.06-.06a1.7 1.7 0 0 0-1.88-.34 1.7 1.7 0 0 0-1 1.55V20h-3v-.08a1.7 1.7 0 0 0-1-1.55 1.7 1.7 0 0 0-1.88.34l-.06.06-2.1-2.1.06-.06A1.7 1.7 0 0 0 7.1 15a1.7 1.7 0 0 0-1.55-1H5.5v-3h.08a1.7 1.7 0 0 0 1.55-1 1.7 1.7 0 0 0-.34-1.88l-.06-.06 2.1-2.1.06.06A1.7 1.7 0 0 0 10.77 5a1.7 1.7 0 0 0 1-1.55V3.4h3v.05a1.7 1.7 0 0 0 1 1.55 1.7 1.7 0 0 0 1.88-.34l.06-.06 2.1 2.1-.06.06a1.7 1.7 0 0 0-.34 1.88 1.7 1.7 0 0 0 1.55 1h.08v3h-.08a1.7 1.7 0 0 0-1.55 1Z"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <div class="menu-stage">
+        <div class="hero">
+          <div class="eyebrow"><i></i>TROPICAL WILD RIVER</div>
+          <h1 class="logo" aria-label="River Rush"><span>RIVER</span><strong>RUSH</strong></h1>
+          <p class="tagline">Carve the current.<br><em>Chase the horizon.</em></p>
+
+          <div class="race-facts">
+            <div><b>6</b><span>riders</span></div>
+            <div><b>3</b><span>laps</span></div>
+            <div><b>90s+</b><span>of rush</span></div>
+          </div>
+
+          <div class="cta-block">
+            <div class="cta-kicker"><span class="live-dot"></span>QUICK RACE · READY</div>
+            <button id="quickRaceBtn" class="btn btn-primary" aria-label="Start">
+              <span>START</span>
+              <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12h13M13 6l6 6-6 6"/></svg>
+            </button>
+          </div>
+
+          <div class="mode-strip">
+            <button id="careerBtn" class="mode-card">
+              <span class="mode-icon">
+                <svg viewBox="0 0 24 24" width="21" height="21" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M8 21h8M12 17v4M7 4h10v4a5 5 0 0 1-10 0V4Z"/><path d="M7 6H4v2a4 4 0 0 0 4 4M17 6h3v2a4 4 0 0 1-4 4"/></svg>
+              </span>
+              <span class="mode-text"><b>CAREER</b><small>4 river cups</small></span>
+              <span id="careerBadge" class="mode-badge">1/4</span>
+            </button>
+            <button id="timeTrialBtn" class="mode-card">
+              <span class="mode-icon">
+                <svg viewBox="0 0 24 24" width="21" height="21" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2.5 2.5M9 2h6M12 2v3"/></svg>
+              </span>
+              <span class="mode-text"><b>TIME TRIAL</b><small>Beat your best</small></span>
+            </button>
+            <button id="garageBtn" class="mode-card">
+              <span class="mode-icon">
+                <svg viewBox="0 0 24 24" width="21" height="21" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M4 17h16M6 17l1.5-6.5A2.5 2.5 0 0 1 10 8.5h4a2.5 2.5 0 0 1 2.5 2L18 17"/><path d="M8 17v2M16 17v2M9 12h6"/></svg>
+              </span>
+              <span class="mode-text"><b>GARAGE</b><small>Ride &amp; upgrade</small></span>
+            </button>
+            <button id="dailyBtn" class="mode-card">
+              <span class="mode-icon">
+                <svg viewBox="0 0 24 24" width="21" height="21" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3.5" y="5" width="17" height="15" rx="3"/><path d="M7 3v4M17 3v4M3.5 10h17M8 14h2M14 14h2"/></svg>
+              </span>
+              <span class="mode-text"><b>DAILY</b><small>Missions + gift</small></span>
+              <span id="dailyBadge" class="mode-badge alert hidden">!</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="menu-foot">
+        <div class="foot-tip"><kbd>◀</kbd><kbd>▶</kbd> steer <span>·</span> <kbd>SHIFT</kbd> nitro <span>·</span> <kbd>SPACE</kbd> jump</div>
+        <div class="foot-brand">MADE FOR THE CURRENT</div>
+      </div>
+    </section>
+
+    <!-- HUD -->
+    <section id="hud" class="hud hidden" aria-label="Race heads-up display">
+      <div class="hud-top">
+        <div class="minimap-shell">
+          <canvas id="minimap" width="220" height="220"></canvas>
+          <div class="minimap-ring"></div>
+          <div id="modeChip" class="mode-chip">QUICK RACE</div>
+        </div>
+
+        <div class="race-stats">
+          <div class="stat-block pos-block">
+            <span>POS</span>
+            <strong><b id="hudPos">1</b><i>/6</i></strong>
+          </div>
+          <div class="stat-block">
+            <span>LAP</span>
+            <strong><b id="hudLap">1</b><i>/3</i></strong>
+          </div>
+          <div class="race-clock">
+            <span id="hudTimer">0:00.0</span>
+            <em id="hudLapTime">LAP 0:00.0</em>
+          </div>
+        </div>
+
+        <button id="pauseBtn" class="icon-btn pause-btn" aria-label="Pause">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><rect x="7" y="5" width="3.5" height="14" rx="1.2"/><rect x="14" y="5" width="3.5" height="14" rx="1.2"/></svg>
+        </button>
+      </div>
+
+      <div class="status-row">
+        <div id="shieldTag" class="status-tag shield hidden">
+          <svg viewBox="0 0 24 24" width="15" height="15" fill="currentColor"><path d="M12 2 4 6v5c0 5 3.4 8.7 8 11 4.6-2.3 8-6 8-11V6l-8-4Z"/></svg>
+          SHIELD <b id="shieldTime">8s</b>
+        </div>
+        <div id="coinTag" class="status-tag coin hidden"><span class="coin-glyph small">●</span> <b id="raceCoins">0</b></div>
+      </div>
+
+      <div id="raceMessage" class="race-message"></div>
+      <div id="checkpointToast" class="checkpoint-toast"></div>
+
+      <div class="hud-bottom">
+        <div id="joystickZone" class="joystick-zone" aria-label="Steering joystick">
+          <div class="joystick-base">
+            <div class="joystick-ticks"></div>
+            <div id="joystickKnob" class="joystick-knob">
+              <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor"><path d="M7 10 12 5l5 5H7Zm0 4 5 5 5-5H7Z"/></svg>
+            </div>
+          </div>
+          <span class="control-label">STEER</span>
+        </div>
+
+        <div class="center-cluster">
+          <div class="nitro-wrap">
+            <div class="nitro-head"><span>NITRO</span><b id="nitroPct">0%</b></div>
+            <div class="nitro-track"><i id="nitroFill"></i><span class="nitro-sheen"></span></div>
+          </div>
+          <div class="speedo">
+            <svg class="speedo-arc" viewBox="0 0 120 120">
+              <circle cx="60" cy="60" r="51" class="arc-bg"/>
+              <circle id="speedArc" cx="60" cy="60" r="51" class="arc-fill" transform="rotate(135 60 60)"/>
+            </svg>
+            <div class="speedo-read"><b id="speedVal">0</b><span>KM/H</span></div>
+            <div id="driftTag" class="drift-tag hidden">DRIFT <b>+NITRO</b></div>
+          </div>
+        </div>
+
+        <div class="action-cluster">
+          <button id="brakeBtn" class="round-btn brake" aria-label="Brake">
+            <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="8"/><path d="M8 12h8"/></svg>
+            <span>BRAKE</span>
+          </button>
+          <button id="nitroBtn" class="round-btn nitro" aria-label="Nitro boost">
+            <span class="nitro-flame">
+              <svg viewBox="0 0 24 24" width="27" height="27" fill="currentColor"><path d="M13 2c.6 3.2-1.4 4.7-2.6 6.4C9 10.4 8 12.1 8 14a4 4 0 0 0 8 .3c1.8 1 2.5 2.5 2.5 2.5S20 15.4 20 12c0-4.5-3-7.4-7-10Zm-.2 12.8c-1 0-1.8-.8-1.8-1.9 0-1.3 1.2-2.2 1.8-3.6.8 1.2 1.9 2.4 1.9 3.7 0 1-.9 1.8-1.9 1.8Z"/></svg>
+            </span>
+            <span>NITRO</span>
+            <i class="full-ring"></i>
+          </button>
+        </div>
+      </div>
+
+      <div class="swipe-hint" id="swipeHint">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 19V5M6 11l6-6 6 6"/></svg>
+        SWIPE UP TO JUMP
+      </div>
+    </section>
+
+    <!-- COUNTDOWN -->
+    <div id="countdown" class="countdown hidden">
+      <div class="countdown-kicker">RIVER RUSH</div>
+      <div id="countdownValue" class="countdown-value">3</div>
+      <div id="countdownSub" class="countdown-sub">HOLD THE LINE</div>
+      <div class="start-lights"><i></i><i></i><i></i></div>
+    </div>
+
+    <!-- PAUSE -->
+    <div id="pause" class="modal-layer hidden">
+      <div class="modal-card pause-card">
+        <div class="panel-kicker">TAKE A BREATH</div>
+        <h2>Paused</h2>
+        <p class="pause-sub">The river waits.</p>
+        <div class="stack">
+          <button id="resumeBtn" class="btn btn-primary"><span>RESUME</span></button>
+          <button id="restartBtn" class="btn btn-glass">RESTART RACE</button>
+          <button id="pauseSettingsBtn" class="btn btn-glass">SETTINGS</button>
+          <button id="quitBtn" class="btn btn-quiet">QUIT TO MENU</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- RESULTS -->
+    <div id="results" class="modal-layer results-layer hidden">
+      <div class="results-card">
+        <div class="results-burst" aria-hidden="true"></div>
+        <div class="panel-kicker" id="resultKicker">RACE COMPLETE</div>
+        <div class="result-place"><span id="resultOrdinal">1st</span><small id="resultPlaceLabel">PLACE</small></div>
+        <h2 id="resultTitle">Current conquered</h2>
+        <p id="resultSub" class="result-sub">Clean lines. Cold spray. Big reward.</p>
+
+        <div class="result-stats">
+          <div><span>RACE TIME</span><b id="resultTime">0:00.0</b></div>
+          <div><span>BEST LAP</span><b id="resultBestLap">0:00.0</b></div>
+          <div><span>TOP SPEED</span><b id="resultSpeed">0</b></div>
+        </div>
+
+        <div class="reward-box">
+          <div class="reward-line"><span>Prize money</span><b id="rewardPrize">+0</b></div>
+          <div class="reward-line"><span>Coins collected</span><b id="rewardCoins">+0</b></div>
+          <div class="reward-line"><span>Mission progress</span><b id="rewardMissions">—</b></div>
+          <div class="reward-total"><span>TOTAL</span><b><i class="coin-glyph small">●</i><span id="rewardTotal">0</span></b></div>
+        </div>
+
+        <div class="result-new hidden" id="resultNew">NEW PERSONAL BEST</div>
+        <div class="results-actions">
+          <button id="againBtn" class="btn btn-primary"><span>RACE AGAIN</span></button>
+          <button id="resultsMenuBtn" class="btn btn-glass">MENU</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- GENERIC PANEL (career / garage / daily / settings) -->
+    <div id="panelLayer" class="modal-layer panel-layer hidden">
+      <div id="panelCard" class="modal-card panel-card" role="dialog" aria-modal="true"></div>
+    </div>
+
+    <!-- TOAST -->
+    <div id="toast" class="toast hidden"></div>
+
+    <!-- rotate hint removed: portrait is fully supported -->
+  </div>
+</body>
+</html>

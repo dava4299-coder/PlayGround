@@ -1,0 +1,18 @@
+{
+  "name": "river-rush",
+  "version": "1.0.0",
+  "private": true,
+  "description": "River Rush — a tropical jetski racing game for mobile browsers",
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host 0.0.0.0",
+    "build": "vite build --base ./",
+    "preview": "vite preview --host 0.0.0.0"
+  },
+  "dependencies": {
+    "three": "^0.187.0"
+  },
+  "devDependencies": {
+    "vite": "^7.3.7"
+  }
+}
